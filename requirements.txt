@@ -1,0 +1,3 @@
+python-dotenv==1.0.0
+modal-client~=0.50
+jupyter
