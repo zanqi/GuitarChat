@@ -2,11 +2,13 @@
 
 CONFIG = {"MONGO_DATABASE": "guitar-dev", "MONGO_COLLECTION": "guitar-chat"}
 
+
 def drop(collection=None, db=None, client=None):
     """Drops a collection from the database."""
     collection = get_collection(collection, db, client)
 
     collection.drop()
+
 
 def get_collection(collection=None, db=None, client=None):
     """Accesses a specific collection in the document store."""
@@ -22,6 +24,7 @@ def get_collection(collection=None, db=None, client=None):
         collection = db.get_collection(collection)
         return collection
 
+
 def get_database(db=None, client=None):
     """Accesses a specific database in the document store."""
     import pymongo
@@ -34,6 +37,7 @@ def get_database(db=None, client=None):
     else:
         db = client.get_database(db)
         return db
+
 
 def connect(user=None, password=None, uri=None):
     """Connects to the document store, here MongoDB."""
@@ -55,5 +59,3 @@ def connect(user=None, password=None, uri=None):
     client = pymongo.MongoClient(connection_string, connect=True, appname="ask-fsdl")
 
     return client
-
-
