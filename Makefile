@@ -2,18 +2,21 @@
 # export ENV=dev  # set it as an environment variable
 # ENV=prod make help # or set it for each make command
 ENV_LOADED :=
+ENV_FILE :=
 
 ifeq ($(ENV), prod)
     ifneq (,$(wildcard ./.env))
         include .env
         export
 				ENV_LOADED := Loaded config from .env
+				ENV_FILE := .env
     endif
 else
     ifneq (,$(wildcard ./.env.dev))
         include .env.dev
         export
 				ENV_LOADED := Loaded config from .env.dev
+				ENV_FILE := .env.dev
     endif
 endif
 
@@ -61,3 +64,18 @@ secrets: modal-auth  ## pushes secrets from .env to Modal
 document-store: secrets ## creates a MongoDB collection that contains the document corpus
 	@tasks/pretty_log.sh "See docstore.py and the ETL notebook for details"
 	MODAL_ENVIRONMENT=$(ENV) tasks/run_etl.sh --drop --db $(MONGODB_DATABASE) --collection $(MONGODB_COLLECTION)
+
+vector-index: secrets ## adds a FAISS vector index into the corpus to the application
+	@tasks/pretty_log.sh "Assumes you've set up the document storage, see document-store"
+	MODAL_ENVIRONMENT=$(ENV) modal run app.py::stub.create_vector_index --db $(MONGODB_DATABASE) --collection $(MONGODB_COLLECTION)
+
+cli-query: secrets ## run a query via a CLI interface
+	@tasks/pretty_log.sh "Assumes you've set up the vector index"
+	MODAL_ENVIRONMENT=$(ENV) modal run app.py::stub.cli --query "${QUERY}"
+
+# These two targets are for experiment
+test: $(ENV_FILE) ## runs tests
+	@echo "Running tests..."
+
+build: test ## builds the project
+	@echo "Building..."

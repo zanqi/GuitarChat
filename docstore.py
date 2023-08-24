@@ -59,3 +59,13 @@ def connect(user=None, password=None, uri=None):
     client = pymongo.MongoClient(connection_string, connect=True, appname="ask-fsdl")
 
     return client
+
+
+def get_documents(collection=None, db=None, client=None, query=None):
+    """Fetches a collection of documents from a document database."""
+    collection = get_collection(collection, db, client)
+
+    query = query or {}
+    docs = collection.find(query)
+
+    return docs
