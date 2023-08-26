@@ -4,3 +4,5 @@ GuitarChat is a question answering application that answers questions about guit
 
 ### todo
 - [ ] `make document-store` to skip sending secrets to the server every time
+- [ ] Documents in prompt should include metadata: title, chapter title, etc.
+- [ ] Test different models: PaLM, Antrhopic, etc. Produce a wandb eval report.
