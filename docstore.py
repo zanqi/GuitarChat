@@ -1,5 +1,9 @@
 """Functions to connect to a document store and fetch documents from it."""
 
+import pymongo
+import pymongo.database
+
+
 CONFIG = {"MONGO_DATABASE": "guitar-dev", "MONGO_COLLECTION": "guitar-chat"}
 
 
@@ -13,6 +17,7 @@ def drop(collection=None, db=None, client=None):
 def get_collection(collection=None, db=None, client=None):
     """Accesses a specific collection in the document store."""
     import pymongo
+    import pymongo.collection
 
     db = get_database(db, client)
 
@@ -25,9 +30,10 @@ def get_collection(collection=None, db=None, client=None):
         return collection
 
 
-def get_database(db=None, client=None):
+def get_database(db=None, client=None) -> pymongo.database.Database:
     """Accesses a specific database in the document store."""
     import pymongo
+    import pymongo.database
 
     client = client or connect()
 
@@ -43,6 +49,7 @@ def connect(user=None, password=None, uri=None):
     """Connects to the document store, here MongoDB."""
     import os
     import urllib
+    import urllib.parse
 
     import pymongo
 

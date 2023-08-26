@@ -73,6 +73,14 @@ cli-query: secrets ## run a query via a CLI interface
 	@tasks/pretty_log.sh "Assumes you've set up the vector index"
 	MODAL_ENVIRONMENT=$(ENV) modal run app.py::stub.cli --query "${QUERY}"
 
+backend: secrets ## deploy the Q&A backend on Modal
+	@tasks/pretty_log.sh "Assumes you've set up the vector index, see vector-index"
+	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_backend_modal.sh deploy
+
+serve-backend: secrets ## run the Q&A backend as a hot-reloading "dev" server on Modal
+	@tasks/pretty_log.sh "Assumes you've set up the vector index, see vector-index"
+	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_backend_modal.sh serve
+
 # These two targets are for experiment
 test: $(ENV_FILE) ## runs tests
 	@echo "Running tests..."
